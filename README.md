@@ -1,153 +1,67 @@
-# Teste Feito por João Victor Fornitani Silva para o PickPay
+# Teste Feito por João Victor Fornitani Silva para o PickPay :)
 
 ## Start (Requisitos):
-- Ter instalado docker e docker-compose
-- Ultilizar comandos  [docker-compose up -d, docker-compose up]
-- Ultilizar um serviço de consulta de endpoint ultilizando como base localhost
+- Ter instalado docker e docker-compose https://docs.docker.com/compose/install
+- Dentro do Projeto Ultilizar Comando  [docker-compose up -d db && sleep 10 && docker-compose up -d backend]
+- Ultilizar um serviço de consulta de endpoint("exemplo:Postman") ultilizando como base localhost
 
--Obs: Caso haja um erro quando os container forem iniciados subir o container de backend a parte[docker-compose up backend]
+## Documentação:
+
+##### Swagger : https://editor.swagger.io/ e https://swagger.io/
+- User -> /src/Components/Users/swagger.yml
+- Wallet -> /src/Components/Wallet/swagger.yml (transaction)
+- A documentação da API está em swagger
+
 
 ## Endpoints:
 #### POST (v1/user/save) - type Json
-    - Example body{
-        "nome": "Victor",
+    - Example body
+    {
+        "name": "Pedro Mario Neto",
         "email": "marinho@marinho.com",
-        "cpf": 57309756002,
-        "cep": 12082630,
-        "frete": 12.50,
-        "valor": 15.40,
-        "itens": {
-            "sku": 248,
-            "descricao": "produto novo",
-            "valor": 30.55,
-            "quantidade": 5
-        }
+        "cpf": null,
+        "cnpj": 36269734000118,
+        "password": "meucachorro"
     }
-- Descrição: Endpoint para salvar os dados
+- Descrição: Endpoint para salvar os dados do usuários
+
 #### GET (v1/user/) - Type Json
       - Example body{}
 
-- Descrição: Endpoint para consulta dos dados
+- Descrição: Endpoint para consulta dos usuários
+
+#### POST (v1/wallet/transaction) - type Json
+    - Example body
+    {
+        "name": "Pedro Mario Neto",
+        "email": "marinho@marinho.com",
+        "cpf": null,
+        "cnpj": 36269734000118,
+        "password": "meucachorro"
+    }
+- Descrição: Endpoint para salvar uma transação entre carteiras 
+
+#### GET (v1/wallet/) - Type Json
+      - Example body{}
+
+- Descrição: Endpoint para consulta das transaçãoes
+
+## Estrutura ulitlizada 
+
+- Tem como principal a ultilização de Arquitetura baseada em DDD Domain-driven Design, que foca na divisão da regra de negócio com a com a Infraestrutura ultilizada por ela.
+
+- Além do uso de metricas ultilizadas na Arquitetura Hexagonal, que distingue o que se chama de ambiente externo e interno
+
+- Uso de algumas nomeclaturas da Estrutura MVC 
+
+- Com o uso paradigigma de programação com base em OOP  
 
 
 
- -------------------------------
- -------------------------------
- -------------------------------
+## Proposta de melhoria
 
+- Os Componentes rodarem independentes em Microserviços como por exemplo em um ECS(https://docs.aws.amazon.com/pt_br/AmazonECS/latest/developerguide/Welcome.html) ou Benastalk(https://docs.aws.amazon.com/pt_br/elasticbeanstalk/latest/dg/Welcome.html)
 
-# Desafio Back-end PicPay
+- Ultilização de um Sistema de mensageria como Pub/Sub ou um Kafka, para que ele precise notificar os usuários sobre alguma operação, mas o serviço externo pode estar indisponivel, ele adicionaria a uma fila que seria lida futuramente, mesmo que não possa ser executado no momento desejado 
 
-Primeiramente, obrigado pelo seu interesse em trabalhar na melhor plataforma de pagamentos do mundo!
-Abaixo você encontrará todos as informações necessárias para iniciar o seu teste.
-
-## Avisos antes de começar
-
-- Crie um repositório no seu GitHub **sem citar nada relacionado ao PicPay**.
-- Faça seus commits no seu repositório.
-- Envie o link do seu repositório para o email **talentos_php@picpay.com**.
-- Você poderá consultar o Google, Stackoverflow ou algum projeto particular na sua máquina.
-- Dê uma olhada nos [Materiais úteis](#materiais-úteis).
-- Fique à vontade para perguntar qualquer dúvida aos recrutadores.
-- Fique tranquilo, respire, assim como você, também já passamos por essa etapa. Boa sorte! :)
-
-*Corpo do Email com o link do repositório do desafio*
-
->Seu Nome
->
->Nome do recrutador
->
->Link do repositório
->
->Link do Linkedin
-
-## Setup do projeto
-
-- Framework: Fique a vontade pra usar o framework que quiser
-- Subir local ou Docker * (valorizamos uma boa estrutura de docker feita por você)
-
-## Para o dia da entrevista técnica
-Na data marcada pelo recrutador tenha sua aplicação rodando na sua máquina local para execução dos testes e para nos mostrar os pontos desenvolvidos e possíveis questionamentos.
-
-## Objetivo - PicPay Simplificado
-
-Temos 2 tipos de usuários, os comuns e lojistas, ambos têm carteira com dinheiro e realizam transferências entre eles. Vamos nos atentar **somente** ao fluxo de transferência entre dois usuários.
-
-Requisitos:
-
-- Para ambos tipos de usuário, precisamos do Nome Completo, CPF, e-mail e Senha. CPF/CNPJ e e-mails devem ser únicos no sistema. Sendo assim, seu sistema deve permitir apenas um cadastro com o mesmo CPF ou endereço de e-mail.
-
-- Usuários podem enviar dinheiro (efetuar transferência) para lojistas e entre usuários. 
-
-- Lojistas **só recebem** transferências, não enviam dinheiro para ninguém.
-
-- Antes de finalizar a transferência, deve-se consultar um serviço autorizador externo, use este mock para simular (https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6).
-
-- A operação de transferência deve ser uma transação (ou seja, revertida em qualquer caso de inconsistência) e o dinheiro deve voltar para a carteira do usuário que envia. 
-
-- No recebimento de pagamento, o usuário ou lojista precisa receber notificação enviada por um serviço de terceiro e eventualmente este serviço pode estar indisponível/instável. Use este mock para simular o envio (https://run.mocky.io/v3/b19f7b9f-9cbf-4fc6-ad22-dc30601aec04). 
-
-- Este serviço deve ser RESTFul.
-
-### Payload
-
-POST /transaction
-
-```json
-{
-    "value" : 100.00,
-    "payer" : 4,
-    "payee" : 15
-}
-```
-
-
-# Avaliação
-
-Apresente sua solução utilizando o framework que você desejar, justificando a escolha.
-Atente-se a cumprir a maioria dos requisitos, pois você pode cumprir-los parcialmente e durante a avaliação vamos bater um papo a respeito do que faltou.
-
-Teremos 2 partes da avaliação:
-
-A correção objetiva será realizada através da utilização de um script de correção automatizada.
-
-A correção qualitativa será durante a entrevista e levará em conta os seguintes critérios:
-
-## O que será avaliado e valorizamos :heart:
-- Documentação
-- Se for para vaga sênior, foque bastante no **desenho de arquitetura**
-- Código limpo e organizado (nomenclatura, etc)
-- Conhecimento de padrões (PSRs, design patterns, SOLID)
-- Ser consistente e saber argumentar suas escolhas
-- Apresentar soluções que domina
-- Modelagem de Dados
-- Manutenibilidade do Código
-- Tratamento de erros
-- Cuidado com itens de segurança
-- Arquitetura (estruturar o pensamento antes de escrever)
-- Carinho em desacoplar componentes (outras camadas, service, repository)
-
-De acordo com os critérios acima, iremos avaliar seu teste para avançarmos para a entrevista técnica.
-Caso não tenha atingido aceitavelmente o que estamos propondo acima, não iremos prosseguir com o processo.
-
-## O que NÃO será avaliado :warning:
-- Fluxo de cadastro de usuários e lojistas
-- Fluxo de autenticação
-- Frontend (só avaliaremos a API Restful)
-
-## O que será um diferencial
-- Uso de Docker
-- Testes de [integração](https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing)
-- Testes [unitários](https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing)
-- Uso de Design Patterns
-- Documentação
-- Proposta de melhoria na arquitetura
-
-
-## Materiais úteis
-- http://br.phptherightway.com/
-- https://www.php-fig.org/psr/psr-12/
-- https://www.atlassian.com/continuous-delivery/software-testing/types-of-software-testing
-- https://github.com/exakat/php-static-analysis-tools
-- https://martinfowler.com/articles/microservices.html
-- https://picpay.com/site/sobre-nos
+- Seguraça no endpoint para não ser ultilização caso não haja o token em JWT(https://jwt.io/), OBS: Não foi implementado por motivos de teste, mas caso necessário será adicionado a rota, a variavel de ambiente com a key já está adicionada ao docker-compose.yml 

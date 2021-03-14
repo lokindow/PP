@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  title: Wallet API
+  description: This is a Pickpay internal API for Wallet
+  version: 1.0.0
+#--------------------------------------------------
+servers:
+  - url: "http://{environment}/v1/wallet"
+    variables:
+      environment:
+        default: localhost
+        enum:
+          - producao.com # Production server
+          - teste.com # Stage server
+          - localhost # Development environment
+#--------------------------------------------------
+tags:
+  - name: Wallet
+    description: Everything wallet
+#--------------------------------------------------
+paths:
+  /:
+    get:
+      summary: Search All Transaction
+      tags:
+        - Wallet
+      responses:
+        200:
+          $ref: "#/components/responses/GetAllTransaction"
+        422:
+          $ref: "#/components/responses/UnprocessableEntity"
+        503:
+          $ref: "#/components/responses/InternalServerError"
+  #--------------------------------------------------
+  /transaction:
+    post:
+      summary: Add a Transaction
+      tags:
+        - Wallet
+      requestBody:
+        $ref: "#/components/requestBodies/SetTransaction"
+      responses:
+        201:
+          $ref: "#/components/responses/SetTransaction"
+        422:
+          $ref: "#/components/responses/UnprocessableEntity"
+        503:
+          $ref: "#/components/responses/InternalServerError"
+  #--------------------------------------------------
+
+components:
+  #--------------------------------------------------
+
+  requestBodies:
+    #--------------------------------------------------
+    SetTransaction:
+      description: Values Transaction
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - payer
+              - payee
+              - value
+            properties:
+              payer:
+                type: integer
+                example: 1
+              payee:
+                type: integer
+                example: 2
+              value:
+                type: integer
+                example: 100.00
+
+    #--------------------------------------------------
+  responses:
+    #--------------------------------------------------
+    GetAllTransaction:
+      description: Is the answer by searching for all transactions
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GetAllTransaction"
+    #--------------------------------------------------
+    SetTransaction:
+      description: Is the answer to creating an item transaction in DB
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/SetTransaction"
+    #--------------------------------------------------
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NotFound"
+    #--------------------------------------------------
+    AccessDenied:
+      description: AccessDenied
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AccessDenied"
+    #--------------------------------------------------
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UnprocessableEntity"
+    #--------------------------------------------------
+    InternalServerError:
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InternalServerError"
+  #--------------------------------------------------
+
+  schemas:
+    #--------------------------------------------------
+    NotFound:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Infelizmente não foi possível encontrar este registro.
+            status:
+              type: string
+              example: 404
+            errors:
+              type: object
+    #--------------------------------------------------
+    UnprocessableEntity:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Não foi possível processar as instruções presentes.
+            status:
+              type: string
+              example: 422
+    #--------------------------------------------------
+    AccessDenied:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Infelizmente você não possui permissão para executar esta ação!
+            status:
+              type: string
+              example: 403
+    #--------------------------------------------------
+    InternalServerError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Erro inesperado do servidor, consulte o log para mais informações.
+            status:
+              type: string
+              example: 500
+    #--------------------------------------------------
+    SetTransaction:
+      type: object
+      properties:
+        data:
+          type: object
+          example:
+            {
+              "value": 100,
+              "payer": 1,
+              "payee": 2,
+              "id": 11,
+              "usersNotification": true,
+            }
+    #--------------------------------------------------
+    GetAllTransaction:
+      type: object
+      properties:
+        data:
+          type: object
+          example: { "id": 1, "payer": 4, "payee": 15, "value": 100 }
+    #--------------------------------------------------

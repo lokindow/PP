@@ -51,6 +51,6 @@ class WalletController extends Controller
         $objInput = new TransactionInput($objRequest->all());
         $objResult = $this->objTransaction->run($objInput->toArray());
 
-        return response()->json($objResult, !empty($objResult->data) ? 200 : $objResult->error->status);
+        return response()->json($objResult, !empty($objResult->data) ? 201 : $objResult->error->status);
     }
 }

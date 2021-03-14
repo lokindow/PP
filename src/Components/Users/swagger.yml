@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: User API
+  description: This is a Pickpay internal API for User
+  version: 1.0.0
+#--------------------------------------------------
+servers:
+  - url: "http://{environment}/v1/user"
+    variables:
+      environment:
+        default: localhost
+        enum:
+          - producao.com # Production server
+          - teste.com # Stage server
+          - localhost # Development environment
+#--------------------------------------------------
+tags:
+  - name: Users
+    description: Everything Users
+#--------------------------------------------------
+paths:
+  /:
+    get:
+      summary: Search All Users
+      tags:
+        - Users
+      responses:
+        200:
+          $ref: "#/components/responses/GetAllUsers"
+        422:
+          $ref: "#/components/responses/UnprocessableEntity"
+        503:
+          $ref: "#/components/responses/InternalServerError"
+  #--------------------------------------------------
+  /save:
+    post:
+      summary: Save User
+      tags:
+        - Users
+      requestBody:
+        $ref: "#/components/requestBodies/Save"
+      responses:
+        201:
+          $ref: "#/components/responses/Save"
+        422:
+          $ref: "#/components/responses/UnprocessableEntity"
+        503:
+          $ref: "#/components/responses/InternalServerError"
+  #--------------------------------------------------
+
+components:
+  #--------------------------------------------------
+
+  requestBodies:
+    #--------------------------------------------------
+    Save:
+      description: Data about user
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - name
+              - email
+              - cpf / cnpj
+              - password
+            properties:
+              name:
+                type: string
+                example: "João Pedro"
+              email:
+                type: string
+                example: "teste@teste.com"
+              cpf / cnpj:
+                type: integer
+                example: 36269734000118
+              password:
+                type: string
+                example: "minhasenha1234"
+
+    #--------------------------------------------------
+  responses:
+    #--------------------------------------------------
+    GetAllUsers:
+      description: Is the answer by searching for all users
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GetAllUsers"
+    #--------------------------------------------------
+    Save:
+      description: Is the answer to creating an user in DB
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Save"
+    #--------------------------------------------------
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NotFound"
+    #--------------------------------------------------
+    AccessDenied:
+      description: AccessDenied
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AccessDenied"
+    #--------------------------------------------------
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UnprocessableEntity"
+    #--------------------------------------------------
+    InternalServerError:
+      description: Service Unavailable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InternalServerError"
+  #--------------------------------------------------
+
+  schemas:
+    #--------------------------------------------------
+    NotFound:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Infelizmente não foi possível encontrar este registro.
+            status:
+              type: string
+              example: 404
+            errors:
+              type: object
+    #--------------------------------------------------
+    UnprocessableEntity:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Não foi possível processar as instruções presentes.
+            status:
+              type: string
+              example: 422
+    #--------------------------------------------------
+    AccessDenied:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Infelizmente você não possui permissão para executar esta ação!
+            status:
+              type: string
+              example: 403
+    #--------------------------------------------------
+    InternalServerError:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Erro inesperado do servidor, consulte o log para mais informações.
+            status:
+              type: string
+              example: 500
+    #--------------------------------------------------
+    Save:
+      type: object
+      properties:
+        data:
+          type: object
+          example:
+            {
+              "name": "Pedro Mario Neto",
+              "email": "marinho@marinho.com",
+              "cnpj": 36269734000118,
+              "password": "bWV1Y2FjaG9ycm8=",
+              "type": "seller",
+              "id": 2,
+            }
+    #--------------------------------------------------
+    GetAllUsers:
+      type: object
+      properties:
+        data:
+          type: object
+          example:
+            {
+              "id": 1,
+              "name": "Pedro Mario Neto",
+              "email": "marinho@marinho.com",
+              "cpf": null,
+              "cnpj": "36269734000118",
+              "password": "bWV1Y2FjaG9ycm8=",
+              "type": "seller",
+            }
+    #--------------------------------------------------
