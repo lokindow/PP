@@ -14,7 +14,7 @@ class AddTableTransaction extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE TABLE test.transaction ( id INT NOT NULL AUTO_INCREMENT , payer INT NOT NULL , payee INT NOT NULL , value FLOAT NOT NULL , PRIMARY KEY (id), INDEX idx_payer (payer), UNIQUE idx_payee (payee))");
+        DB::statement("CREATE TABLE test.transaction ( id INT NOT NULL AUTO_INCREMENT , payer INT NOT NULL , payee INT NOT NULL , value FLOAT NOT NULL , PRIMARY KEY (id), INDEX idx_payer (payer), INDEX idx_payee (payee))");
     }
 
     /**
