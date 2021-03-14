@@ -2,11 +2,12 @@
 
 namespace Src\Components\Wallet\Infrastructure\Persistences;
 
-use Src\Libs\TranslateProperties;
 use Src\Libs\Utils;
+use Src\Libs\TranslateProperties;
 
+use Illuminate\Support\Facades\DB;
 use Src\Components\Wallet\Domain\Wallet;
-use Src\Components\Wallet\Domain\IWalletRepository;
+use Src\Components\Wallet\Domain\Interfaces\IWalletRepository;
 
 class WalletRepository implements IWalletRepository
 {
@@ -21,6 +22,11 @@ class WalletRepository implements IWalletRepository
         $this->model = $model;
     }
 
+     /**
+     * Get all Transaction
+     *
+     * @return array
+     */
     public function all(): array
     {
         try {
@@ -44,12 +50,16 @@ class WalletRepository implements IWalletRepository
      */
     public function save(Wallet $objWallet): array
     {
+        DB::beginTransaction();
         try {
+            // Structure the attributes to be inserted
             $this->model->fill($this->objUtils->entityToArray($objWallet));
             $this->model->save();
 
+            DB::commit();
             return $this->model->toArray();
         } catch (\Exception $e) {
+            DB::rollBack();
             return $this->objUtils->getFormattedErrorMessage("custom.generic_error", 500, []);
         }
     }

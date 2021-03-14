@@ -1,6 +1,8 @@
 <?php
 
-namespace Src\Components\Wallet\Domain;
+namespace Src\Components\Wallet\Domain\Interfaces;
+
+use Src\Components\Wallet\Domain\Wallet;
 
 interface IWalletRepository
 {

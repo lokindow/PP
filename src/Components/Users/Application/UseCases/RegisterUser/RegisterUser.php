@@ -3,7 +3,7 @@
 namespace Src\Components\Users\Application\UseCases\RegisterUser;
 
 use Src\Components\Users\Application\UseCases\RegisterUser\RegisterUserOutput;
-use Src\Components\Users\Domain\IUserRepository;
+use Src\Components\Users\Domain\Interfaces\IUserRepository;
 use Src\Components\Users\Domain\User;
 
 /**
@@ -26,7 +26,8 @@ class RegisterUser
   {
 
     $objUser = new User($arrInput);
-
+    
+    //Validate Input in Object
     $arrValidationErrors = $objUser->validate();
 
 
@@ -39,8 +40,9 @@ class RegisterUser
 
     $arrResult = $this->objUserRepository->save($objUser);
 
-    if (empty($arrResult)) {
-      $this->objOutput->onError("custom.validation_error", 422, []);
+    if (!empty($arrResult['error'])) {
+
+      $this->objOutput->onError("custom.validation_error", 422, $arrResult);
       return $this->objOutput;
     }
 

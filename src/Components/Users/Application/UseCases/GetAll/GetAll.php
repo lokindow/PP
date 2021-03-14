@@ -3,7 +3,7 @@
 namespace Src\Components\Users\Application\UseCases\GetAll;
 
 use Src\Components\Users\Application\UseCases\GetAll\GetAllOutput;
-use Src\Components\Users\Domain\IUserRepository;
+use Src\Components\Users\Domain\Interfaces\IUserRepository;
 
 /**
  * Get GetAll of Users

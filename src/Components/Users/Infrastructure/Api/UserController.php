@@ -19,10 +19,8 @@ class UserController extends Controller
     protected $objRegisterUserUsecase;
     protected $objUserPresenter;
 
-    public function __construct(
-        GetAll $objGetAll,
-        RegisterUser $objRegisterUserUsecase
-    ) {
+    public function __construct(GetAll $objGetAll, RegisterUser $objRegisterUserUsecase)
+    {
         $this->objGetAll = $objGetAll;
         $this->objRegisterUserUsecase = $objRegisterUserUsecase;
     }

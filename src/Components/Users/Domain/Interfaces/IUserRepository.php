@@ -1,6 +1,8 @@
 <?php
 
-namespace Src\Components\Users\Domain;
+namespace Src\Components\Users\Domain\Interfaces;
+
+use Src\Components\Users\Domain\User;
 
 interface IUserRepository
 {

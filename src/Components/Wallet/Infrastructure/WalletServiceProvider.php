@@ -17,7 +17,11 @@ class WalletServiceProvider extends ServiceProvider
         //IoC
 
         // Persistences
-        $this->app->bind('Src\Components\Wallet\Domain\IWalletRepository', 'Src\Components\Wallet\Infrastructure\Persistences\WalletRepository');
+        $this->app->bind('Src\Components\Wallet\Domain\Interfaces\IWalletRepository', 'Src\Components\Wallet\Infrastructure\Persistences\WalletRepository');
+        $this->app->bind('Src\Components\Wallet\Domain\Interfaces\IAutorizationTransactionApi', 'Src\Components\Wallet\Infrastructure\Externals\AutorizationTransactionApi');
+        $this->app->bind('Src\Components\Wallet\Domain\Interfaces\IExternalUserPermissionRepository', 'Src\Components\Wallet\Infrastructure\Externals\ExternalUserPermissionRepository');
+        $this->app->bind('Src\Components\Wallet\Domain\Interfaces\ISendNotificationApi', 'Src\Components\Wallet\Infrastructure\Externals\SendNotificationApi');
+        
     }
 
     /**

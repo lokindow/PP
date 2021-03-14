@@ -17,7 +17,7 @@ class UsersServiceProvider extends ServiceProvider
         //IoC
 
         // Persistences
-        $this->app->bind('Src\Components\Users\Domain\IUserRepository', 'Src\Components\Users\Infrastructure\Persistences\UserRepository');
+        $this->app->bind('Src\Components\Users\Domain\Interfaces\IUserRepository', 'Src\Components\Users\Infrastructure\Persistences\UserRepository');
     }
 
     /**

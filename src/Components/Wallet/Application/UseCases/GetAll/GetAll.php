@@ -3,7 +3,7 @@
 namespace Src\Components\Wallet\Application\UseCases\GetAll;
 
 use Src\Components\Wallet\Application\UseCases\GetAll\GetAllOutput;
-use Src\Components\Wallet\Domain\IWalletRepository;
+use Src\Components\Wallet\Domain\Interfaces\IWalletRepository;
 
 /**
  * GetAllTransaction of Wallet

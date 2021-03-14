@@ -6,7 +6,7 @@ use Src\Libs\TranslateProperties;
 use Src\Libs\Utils;
 
 use Src\Components\Users\Domain\User;
-use Src\Components\Users\Domain\IUserRepository;
+use Src\Components\Users\Domain\Interfaces\IUserRepository;
 
 class UserRepository implements IUserRepository
 {
@@ -65,7 +65,11 @@ class UserRepository implements IUserRepository
     {
         $arrResultFind = $this->find($objUser);
         if (!empty($arrResultFind)) {
-            return [];
+            return [
+                "validation" => 'validation.required',
+                "extra" => ['key' => 'cpf e email', 'attribute' => 'email ou cpf inválido'],
+                "error" => TRUE
+            ];
         }
 
         try {
